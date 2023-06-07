@@ -139,7 +139,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command8 
-      Caption         =   "V=[rP]*R"
+      Caption         =   "V=r[P*R]"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -224,7 +224,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command3 
-      Caption         =   "I=[rP]/R"
+      Caption         =   "I=r[P/R]"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -320,6 +320,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Dim flagErro As Boolean
 Dim strCaption As String
 Dim virgula As Boolean
 Dim step As Integer
@@ -675,6 +676,7 @@ Private Sub Command12_Click()
          Beep
          Exit Sub
       End If
+      
       step = 4
       If formula = 1 Then Call Command1_Click
       If formula = 2 Then Call Command2_Click
@@ -687,7 +689,12 @@ Private Sub Command12_Click()
       If formula = 9 Then Call Command9_Click
       If formula = 10 Then Call Command10_Click
       If formula = 11 Then Call Command11_Click
-      If formula = 12 Then Call Command12_Click
+      
+      If formula = 12 Then
+         step = 5
+         Call startFormula(12)
+      End If
+      
       virgula = False
    End If
    
@@ -695,9 +702,19 @@ End Sub
 
 Private Sub cmdClear_Click()
    Call clearValores
-   txtDisplay.Text = "0.000"
    updateCommand (False)
    Me.Caption = strCaption
+   
+   If txtDisplay.Text = "Error" Then
+      If flagErro = False Then
+         flagErro = True
+      Else
+         flagErro = False
+         txtDisplay.Text = "0.000"
+      End If
+   Else
+      txtDisplay.Text = "0.000"
+   End If
    
 End Sub
 
@@ -712,11 +729,19 @@ Dim ultimoCaracter As String
     If ultimoCaracter = "," Then virgula = False
     
     If step = 1 Or step = 2 Then
-      IIf txtDisplay.Text = Empty, value1 = 0, value1 = txtDisplay.Text ' operador ternário
+      If txtDisplay.Text = Empty Then
+         value1 = 0
+      Else
+         value1 = txtDisplay.Text
+      End If
     End If
     
     If step = 5 Or step = 6 Then
-      IIf txtDisplay.Text = Empty, value2 = 0, value2 = txtDisplay.Text ' operador ternário
+      If txtDisplay.Text = Empty Then
+         value2 = 0
+      Else
+         value2 = txtDisplay.Text
+      End If
     End If
     
     
@@ -756,7 +781,7 @@ On Error GoTo Erro
    ElseIf formula = 7 Then
       result = value1 / value2
       txtDisplay.Text = Format(result, "0.000") & "V"
-   ElseIf formula = 7 Then
+   ElseIf formula = 8 Then
       result = Math.Sqr(value1 * value2)
       txtDisplay.Text = Format(result, "0.000") & "V"
    ElseIf formula = 9 Then
@@ -771,8 +796,8 @@ On Error GoTo Erro
       result = value1 * value2
       txtDisplay.Text = Format(result, "0.000") & "W"
    ElseIf formula = 12 Then
-      result = value1 * value2
-      rtxtDisplay.Text = Format(result, "0.000") & "W"
+      result = (value1 * value1) * value2
+      txtDisplay.Text = Format(result, "0.000") & "W"
    End If
    
    Call Timer1_Timer
@@ -852,16 +877,16 @@ Private Sub updateCommand(flag As Boolean)
    Else
       Command1.Caption = "I=V/R"
       Command2.Caption = "I=P/V"
-      Command3.Caption = "I=[R]P/R"
-      Command4.Caption = "R=V[2]/P"
+      Command3.Caption = "I=r[P/R]"
+      Command4.Caption = "R=[Ve2]/P"
       Command5.Caption = "R=V/I"
-      Command6.Caption = "R=P/I[2]"
+      Command6.Caption = "R=P/[Ie2]"
       Command7.Caption = "V=P/I"
-      Command8.Caption = "V=P[R]P*R"
+      Command8.Caption = "V=r[P*R]"
       Command9.Caption = "V=I*R"
-      Command10.Caption = "P=V[2]/R"
+      Command10.Caption = "P=[Ve2]/R"
       Command11.Caption = "P=V*R"
-      Command12.Caption = "P=I[R]*R"
+      Command12.Caption = "P=[Ie2]*R"
       
       If step > 0 Then
          step = 0
@@ -898,17 +923,17 @@ Private Sub Timer1_Timer()
 
    If step > 0 Then
       If formula = 1 Then Me.Caption = "V:" & value1 & "   " & "R:" & value2 & "   " & "A:" & result
-      ElseIf formula = 2 Then Me.Caption = "P:" & value1 & "   " & "V:" & value2 & "   " & "A:" & result
-      ElseIf formula = 3 Then Me.Caption = "P:" & value1 & "   " & "R:" & value2 & "   " & "A:" & result
-      ElseIf formula = 4 Then Me.Caption = "V:" & value1 & "   " & "P:" & value2 & "   " & "R:" & result
-      ElseIf formula = 5 Then Me.Caption = "V:" & value1 & "   " & "I:" & value2 & "   " & "R:" & result
-      ElseIf formula = 6 Then Me.Caption = "P:" & value1 & "   " & "I:" & value2 & "   " & "R:" & result
-      ElseIf formula = 7 Then Me.Caption = "P:" & value1 & "   " & "I:" & value2 & "   " & "V:" & result
-      ElseIf formula = 8 Then Me.Caption = "P:" & value1 & "   " & "R:" & value2 & "   " & "V:" & result
-      ElseIf formula = 9 Then Me.Caption = "I:" & value1 & "   " & "R:" & value2 & "   " & "V:" & result
-      ElseIf formula = 10 Then Me.Caption = "V:" & value1 & "   " & "R:" & value2 & "   " & "W:" & result
-      ElseIf formula = 11 Then Me.Caption = "V:" & value1 & "   " & "R:" & value2 & "   " & "W:" & result
-      ElseIf formula = 12 Then Me.Caption = "I:" & value1 & "   " & "R:" & value2 & "   " & "W:" & result
+      If formula = 2 Then Me.Caption = "P:" & value1 & "   " & "V:" & value2 & "   " & "A:" & result
+      If formula = 3 Then Me.Caption = "P:" & value1 & "   " & "R:" & value2 & "   " & "A:" & result
+      If formula = 4 Then Me.Caption = "V:" & value1 & "   " & "P:" & value2 & "   " & "R:" & result
+      If formula = 5 Then Me.Caption = "V:" & value1 & "   " & "I:" & value2 & "   " & "R:" & result
+      If formula = 6 Then Me.Caption = "P:" & value1 & "   " & "I:" & value2 & "   " & "R:" & result
+      If formula = 7 Then Me.Caption = "P:" & value1 & "   " & "I:" & value2 & "   " & "V:" & result
+      If formula = 8 Then Me.Caption = "P:" & value1 & "   " & "R:" & value2 & "   " & "V:" & result
+      If formula = 9 Then Me.Caption = "I:" & value1 & "   " & "R:" & value2 & "   " & "V:" & result
+      If formula = 10 Then Me.Caption = "V:" & value1 & "   " & "R:" & value2 & "   " & "W:" & result
+      If formula = 11 Then Me.Caption = "V:" & value1 & "   " & "R:" & value2 & "   " & "W:" & result
+      If formula = 12 Then Me.Caption = "I:" & value1 & "   " & "R:" & value2 & "   " & "W:" & result
    End If
    
    'Trata comando backspace
