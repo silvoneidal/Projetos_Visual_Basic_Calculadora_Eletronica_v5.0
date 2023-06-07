@@ -105,7 +105,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command10 
-      Caption         =   "P=[Ve2]/R"
+      Caption         =   "P=(Ve2)/R"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -122,7 +122,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command12 
-      Caption         =   "P=[Ie2]*R"
+      Caption         =   "P=(Ie2)*R"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -139,7 +139,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command8 
-      Caption         =   "V=r[P*R]"
+      Caption         =   "V=r(P*R)"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -173,7 +173,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command6 
-      Caption         =   "R=P/[Ie2]"
+      Caption         =   "R=P/(Ie2)"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -207,7 +207,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command4 
-      Caption         =   "R=[Ve2]/P"
+      Caption         =   "R=(Ve2)/P"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -224,7 +224,7 @@ Begin VB.Form frmMain
       Width           =   1695
    End
    Begin VB.CommandButton Command3 
-      Caption         =   "I=r[P/R]"
+      Caption         =   "I=r(P/R)"
       BeginProperty Font 
          Name            =   "Courier New"
          Size            =   12
@@ -768,7 +768,7 @@ On Error GoTo Erro
       
    'RESISTÊNCIA
    ElseIf formula = 4 Then
-      result = (value1 * value2) / value2
+      result = (value1 * value1) / value2
       txtDisplay.Text = Format(result, "0.000") & "R"
    ElseIf formula = 5 Then
       result = value1 / value2
@@ -877,16 +877,16 @@ Private Sub updateCommand(flag As Boolean)
    Else
       Command1.Caption = "I=V/R"
       Command2.Caption = "I=P/V"
-      Command3.Caption = "I=r[P/R]"
-      Command4.Caption = "R=[Ve2]/P"
+      Command3.Caption = "I=r(P/R)"
+      Command4.Caption = "R=(Ve2)/P"
       Command5.Caption = "R=V/I"
-      Command6.Caption = "R=P/[Ie2]"
+      Command6.Caption = "R=P/(Ie2)"
       Command7.Caption = "V=P/I"
-      Command8.Caption = "V=r[P*R]"
+      Command8.Caption = "V=r(P*R)"
       Command9.Caption = "V=I*R"
-      Command10.Caption = "P=[Ve2]/R"
+      Command10.Caption = "P=(Ve2)/R"
       Command11.Caption = "P=V*R"
-      Command12.Caption = "P=[Ie2]*R"
+      Command12.Caption = "P=(Ie2)*R"
       
       If step > 0 Then
          step = 0
